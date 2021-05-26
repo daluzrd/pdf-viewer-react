@@ -1,34 +1,16 @@
-import React, { useState } from "react";
-import { Document, Page } from "react-pdf";
-import Header from "./components/header";
+import React from "react";
+import Pdf from "./components/pdf";
 
 function App() {
-	const [numPages, setNumPages] = useState();
-	const [pageNumber, setPageNumber] = useState(1);
-
-	const onPageLoaded = ({ pages }) => {
-		debugger;
-		setNumPages(pages);
-	};
-
-	const previousPage = () => {
-		setPageNumber(pageNumber - 1);
-	};
-
-	const nextPage = () => {
-		setPageNumber(pageNumber + 1);
-	};
+	const files = require.context("../public/", false, /\.pdf$/);
+	const fileKeys = files.keys();
 
 	return (
-		<>
-			<Header prevPage={previousPage} nextPage={nextPage} />
-			<Document
-				file="/wwwroot/pdf/25-05-COVID-19_BOLETIM20210525.pdf"
-				onLoadSuccess={onPageLoaded}
-			>
-				<Page pageNumber={pageNumber} />
-			</Document>
-		</>
+		<div style={{ width: 600 }}>
+			{fileKeys.map((fileKey) => {
+				return <Pdf key={fileKey} fileName={fileKey} />;
+			})}
+		</div>
 	);
 }
 
